@@ -1,0 +1,16 @@
+citHeader("To cite the 'cmvdrg' package in publications use:")
+
+year = sub('.*(2[[:digit:]]{3})-.*', '\\1', meta$Date, perl = TRUE)
+vers = paste('R package version', meta$Version)
+
+citEntry(
+  entry = 'Article',
+  title = 'cmvdrg - An {R} package for Human Cytomegalovirus antiviral drug resistance genotyping.',
+  author = 'Charles OJ, Venturini C, Breuer J',
+  journal = 'Biorxiv - preprint',
+  year = '2020',
+  url = '',
+  textVersion = paste('Charles OJ (2020)',
+                      'cmvdrg - An {R} package for Human Cytomegalovirus antiviral drug resistance genotyping.',
+                      'Biorxiv')
+)

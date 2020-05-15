@@ -1,0 +1,104 @@
+#' Make gene lollipop plot
+#'
+#' Produces figures for the web application.
+#' Explores spatial location of mutations in resistance genes.
+#'
+#' @param f.dat resistance data.frame
+#' @param f.gene Which gene to plot
+#' @param global Package object for consistent runtime variables
+#' @return intermediate data.frame with genome level annotation
+#' @export
+
+
+plot_lollipop <- function(f.dat, f.gene = "UL54", global){
+  ## plot mutations in specific genes with resistance mutation.
+  # this could be cleaned up a lot.
+  
+  # load data
+  mut <- f.dat
+
+  
+  # if sample has any mutations in f.gene
+  if(length(grep(unique(mut$GENE), pattern = f.gene)) > 0){
+    
+    #manually force value types, should be oneline or sorted in data
+    mut$RefCount <- as.numeric(mut$RefCount)
+    mut$VarCount <- as.numeric(mut$VarCount) 
+    mut$PROTEINLOC <- as.numeric(mut$PROTEINLOC)
+
+    # call res mutations from mutations
+    mut_res <- mut %>% filter(GENEID==f.gene & CONSEQUENCE=="nonsynonymous")
+    mut_res$depth <- mut_res$RefCount + mut_res$VarCount 
+    resistance_table=global$res_table
+    resistance <- read.csv(resistance_table, header = TRUE,as.is = TRUE)
+    resistance$change <- paste(resistance$GENE,resistance$AA_CHANGE,sep="_")
+    resistance$aapos <- readr::parse_number(resistance$AA_CHANGE)
+    resistance <- resistance %>% filter(GENE== f.gene)
+    resistance = melt(resistance, measure.vars = colnames(resistance[,6:14]))
+    resistance = resistance[resistance$value != "",]
+    resistance = resistance[!is.na(resistance$value),]
+    resistance = resistance %>% group_by(change) %>% arrange(value) %>% top_n(1, value) # reduces data to 1 row per mutation.
+    
+    #f.gene_colour = "Ganciclovir"
+    #d.resall <- resistance[resistance$variable == f.gene_colour,]
+    d.resall = resistance
+    #d.resall$resistance <-as.character(cut(as.numeric(d.resall$value), c(0,1,1.5,99999999), right=FALSE, labels=c("none", "low", "high")))
+    # no need to alter "sus.." or "res.."
+    d.resall$resistance = d.resall$value
+    d.resall$resistance[d.resall$resistance > 1 & d.resall$resistance != "Resistant" & d.resall$resistance != "Susceptible"] = "Resistant"
+    d.resall$resistance[d.resall$resistance <= 1 & d.resall$resistance != "Resistant" & d.resall$resistance != "Susceptible"] = "Susceptible"
+
+    
+    d.resmuts <- data.frame(x = mut_res$PROTEINLOC,
+                            y = readr::parse_number(mut_res$freq),
+                            label = mut_res$aachange)
+    d.resmuts = d.resmuts[!duplicated(d.resmuts),]
+    d.resmuts$resistance = d.resall$resistance[d.resall$AA_CHANGE %in% d.resmuts$label]
+    t.y <- max(d.resmuts$y)/80
+    g <- ggplot() +
+      #must add resistance mut along bottom colour by fold change etc?
+      #all res muts
+      geom_segment(data = d.resall, aes(x = aapos, xend = aapos, y = -t.y, yend = t.y, colour = resistance)) +
+      geom_hline(yintercept = 0) +
+      #lollipop called res muts
+      geom_segment( data = d.resmuts, aes(x=x, xend=x, y=0, yend=y, colour = resistance)) +
+      geom_point(data = d.resmuts, aes(x = x, y = y, colour = "Sample Mutations" , size = 8), show.legend=FALSE) +
+      geom_text(data = d.resmuts, aes(x = x, y = y, label=label), angle = 0, nudge_y = 1)  + 
+      theme_light() +
+      theme(
+        panel.grid.major.x = element_blank(),
+        panel.border = element_blank(),
+        axis.ticks.x = element_blank(),
+        legend.position="bottom"
+      ) +
+      xlab(paste(f.gene, "AA location")) +
+      ylab("Mutation Frequency") +
+      guides(colour=guide_legend(title="Mutation Association"))
+    
+  }else{
+    g <- NULL
+  }
+  return(g)
+  #references
+  # https://bioconductor.org/packages/release/bioc/vignettes/trackViewer/inst/doc/trackViewer.html
+}
+
+
+
+ #old method
+# # pass sample gene info with res
+# sample.gr <- GRanges("NC_006273.2", IRanges(mut_res$PROTEINLOC,width = 1, names = paste0(mut_res$aachange,sep=" N=",mut_res$depth))) 
+# sample.gr$score <- readr::parse_number(mut_res$freq)
+# 
+# # all resistance muts - to add to plot as smlal black lines
+# features_res <- GRanges("NC_006273.2", IRanges(resistance$aapos,width = 1))
+# 
+# # plot res gene lollipop
+# features_res$fill <- "orange"
+# sample.gr$color <- sample(c("orange"), length(mut_res$PROTEINLOC), replace=TRUE)
+# sample.gr$border <- sample(c("gray80"), length(mut_res$PROTEINLOC), replace=TRUE)  
+# 
+#
+#
+# this function takes 10 seconds!!!!!!!!!
+#g <- lolliplot(sample.gr, features_res,ylab="freq",xlab= paste(f.gene, "AA location"))
