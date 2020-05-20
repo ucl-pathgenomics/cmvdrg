@@ -1,5 +1,7 @@
 #' Runs the CMV Resistance Phenotyping Shiny Application
 #' 
+#' @import shiny
+#' 
 #' @export
 
 runShinyCMV = function() {

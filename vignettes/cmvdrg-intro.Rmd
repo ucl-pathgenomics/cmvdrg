@@ -1,8 +1,10 @@
 ---
-title: "introduction"
+title: "cmvdrg-intro"
+author: "OJ Charles"
+date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{introduction}
+  %\VignetteIndexEntry{cmvdrg-intro}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -15,19 +17,20 @@ knitr::opts_chunk$set(
 ```
 
 
-## Call resistance mutations from cmvdrg
 ```{r setup}
-# call the package
 library(cmvdrg)
+```
 
 
+## Call resistance mutations from cmvdrg
+```{r}
 # load some test data, bundled in the package
 my_sample = system.file("testdata", "A10.vcf", package = "cmvdrg")
 
 # this calls any variants in your sample, that are also present in the cmvdrg database.
 data = call_resistance(infile = my_sample, all_mutations = F)
 
-# view the first few lines
+# view the first few lines, there are a lot of columns!
 head(data)
 
 ```

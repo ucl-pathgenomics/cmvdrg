@@ -15,7 +15,7 @@ read_input(infile, global)
 An intermediate data.frame
 }
 \description{
-This function handles a vcf, or varscan tab variant file, or pases fasta files
+This function handles vcf, varscan2 tab variant & fasta file formats
 onto handle_fasta().
 Returns an intermediate data.frame, which contains variant information to be
 annotated by annotate_variants().

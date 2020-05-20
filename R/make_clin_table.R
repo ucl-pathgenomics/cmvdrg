@@ -1,7 +1,6 @@
 #' Clinical information table
 #'
-#' Produces a data.table with a clinica overview for 
-#' resistance phenotype against all drugs in that sample
+#' Produces a data.table with a clinical overview for resistance phenotype against all drugs in that sample
 #'
 #' @param f.dat the complete resistance data.frame
 #' @return a data.table
@@ -35,15 +34,15 @@ make_clin_table = function(f.dat){
     t.dat = dat_drug[,c(col, ncol(dat_drug))]
     
     # fix any reference data points where there is a numeric range of fold change ratio values. take lowest value - again arbitration
-    if(length(t.dat[grepl(pattern = "-",x = t.dat[,1]),1]) > 0){
-      t.dat[grepl(pattern = "-",x = t.dat[,1]),1] = str_split(t.dat[grepl(pattern = "-",x = t.dat[,1]),1], "-", simplify = T)[,1]
+    if(length(t.dat[base::grepl(pattern = "-",x = t.dat[,1]),1]) > 0){
+      t.dat[base::grepl(pattern = "-",x = t.dat[,1]),1] = stringr::str_split(t.dat[base::grepl(pattern = "-",x = t.dat[,1]),1], "-", simplify = T)[,1]
     }
     # are there numbers
-    t.grep = grepl(pattern = "[0-9]", t.dat[,1])
+    t.grep = base::grepl(pattern = "[0-9]", t.dat[,1])
     if(length(t.grep[t.grep==TRUE]) > 0){
       #see numbers
-      #categoriesed as of ---  The Third International Consensus Guidelines on the Management of Cytomegalovirus in Solid-organ Transplantation
-      res.pheno = as.numeric(t.dat[grepl(pattern = "[0-9]", t.dat[,1]),1])
+      #categorised as of ---  The Third International Consensus Guidelines on the Management of Cytomegalovirus in Solid-organ Transplantation
+      res.pheno = as.numeric(t.dat[base::grepl(pattern = "[0-9]", t.dat[,1]),1])
       res.pheno = max(res.pheno)
       if(res.pheno >= 15){
         res.pheno = "High level"
@@ -56,11 +55,11 @@ make_clin_table = function(f.dat){
       }
     res.ev = "good, in vitro"
     #else if there are only 
-    }else if(length(grepl(pattern = "[a-z]", t.dat[,1])[grepl(pattern = "[a-z]", t.dat[,1])==TRUE]) > 0){
-      res.pheno = t.dat[grepl(pattern = "[a-z]", t.dat[,1]),]
-      count_sus = grepl(pattern = "usc", res.pheno[,1])
+    }else if(length(base::grepl(pattern = "[a-z]", t.dat[,1])[base::grepl(pattern = "[a-z]", t.dat[,1])==TRUE]) > 0){
+      res.pheno = t.dat[base::grepl(pattern = "[a-z]", t.dat[,1]),]
+      count_sus = base::grepl(pattern = "usc", res.pheno[,1])
       count_sus = length(count_sus[count_sus==TRUE])
-      count_res = grepl(pattern = "esis", res.pheno[,1])
+      count_res = base::grepl(pattern = "esis", res.pheno[,1])
       count_res = length(count_res[count_res==TRUE])
       
       if(count_sus > 0 && count_res == 0){
@@ -92,9 +91,9 @@ make_clin_table = function(f.dat){
   js <- "(/High/).test(value) ? '#C34318' : (/Moderate/).test(value) ? '#F68C1B' : (/Low/).test(value) ? '#FFC605' : (/Susc/).test(value) ? '#759F2F' : (/vitro/).test(value) ? '#759F2F' : (/anecdotal/).test(value) ? '#F68C1B' :''"
   
   
-  out = datatable(dat, options = list(dom = 't')) %>% 
-    formatStyle(names(dat),
-                1:ncol(dat), backgroundColor = JS(js))
+  out = DT::datatable(dat, options = list(dom = 't')) %>% 
+    DT::formatStyle(names(dat),
+                1:ncol(dat), backgroundColor = DT::JS(js))
   
   
 

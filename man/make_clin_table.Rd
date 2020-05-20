@@ -13,6 +13,5 @@ make_clin_table(f.dat)
 a data.table
 }
 \description{
-Produces a data.table with a clinica overview for 
-resistance phenotype against all drugs in that sample
+Produces a data.table with a clinical overview for resistance phenotype against all drugs in that sample
 }

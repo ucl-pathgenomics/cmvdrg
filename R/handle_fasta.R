@@ -86,7 +86,7 @@ handle_fasta = function(fasta_in, fasta_out, fasta_ref){
   
   ## snp-sites fasta -> vcf. This is great!
   # https://github.com/sanger-pathogens/snp-sites/blob/master/snp-sites.txt
-  vcf_out = str_replace(fasta_out,pattern = ".fasta", replacement = ".vcf")
+  vcf_out = stringr::str_replace(fasta_out,pattern = ".fasta", replacement = ".vcf")
   command = paste("snp-sites -vc -o", vcf_out, fasta_out)
   system(command)
   

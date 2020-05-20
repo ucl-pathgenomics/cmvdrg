@@ -1,0 +1,24 @@
+# R for travis: see documentation at https://docs.travis-ci.com/user/languages/r
+
+language: R
+cache: packages
+sudo: false
+
+
+os:
+  -linux
+  -osx
+  
+  
+r:
+  - 3.4
+  - oldrel
+  - release
+  - devel
+  
+  
+ addons:
+  apt:
+    packages:
+      - mafft # aligning fasta files to Merlin reference
+      - snp-sites # calling variants from alignment

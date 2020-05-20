@@ -7,7 +7,7 @@
 plot_lollipop(f.dat, f.gene = "UL54", global)
 }
 \arguments{
-\item{f.dat}{resistance data.frame}
+\item{f.dat}{resistance data frame from cmvdrg, where all_muts == F}
 
 \item{f.gene}{Which gene to plot}
 

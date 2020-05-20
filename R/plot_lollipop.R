@@ -3,10 +3,14 @@
 #' Produces figures for the web application.
 #' Explores spatial location of mutations in resistance genes.
 #'
-#' @param f.dat resistance data.frame
+#' @param f.dat resistance data frame from cmvdrg, where all_muts == F
 #' @param f.gene Which gene to plot
 #' @param global Package object for consistent runtime variables
 #' @return intermediate data.frame with genome level annotation
+#' 
+#' @importFrom magrittr "%>%"
+#' @importFrom rlang .data
+#' 
 #' @export
 
 
@@ -19,7 +23,7 @@ plot_lollipop <- function(f.dat, f.gene = "UL54", global){
 
   
   # if sample has any mutations in f.gene
-  if(length(grep(unique(mut$GENE), pattern = f.gene)) > 0){
+  if(length(base::grep(unique(mut$GENE), pattern = f.gene)) > 0){
     
     #manually force value types, should be oneline or sorted in data
     mut$RefCount <- as.numeric(mut$RefCount)
@@ -27,17 +31,17 @@ plot_lollipop <- function(f.dat, f.gene = "UL54", global){
     mut$PROTEINLOC <- as.numeric(mut$PROTEINLOC)
 
     # call res mutations from mutations
-    mut_res <- mut %>% filter(GENEID==f.gene & CONSEQUENCE=="nonsynonymous")
+    mut_res <- mut %>% dplyr::filter(.data$GENEID==f.gene & .data$CONSEQUENCE=="nonsynonymous")
     mut_res$depth <- mut_res$RefCount + mut_res$VarCount 
     resistance_table=global$res_table
-    resistance <- read.csv(resistance_table, header = TRUE,as.is = TRUE)
+    resistance <- utils::read.csv(resistance_table, header = TRUE,as.is = TRUE)
     resistance$change <- paste(resistance$GENE,resistance$AA_CHANGE,sep="_")
     resistance$aapos <- readr::parse_number(resistance$AA_CHANGE)
-    resistance <- resistance %>% filter(GENE== f.gene)
-    resistance = melt(resistance, measure.vars = colnames(resistance[,6:14]))
+    resistance <- resistance %>% dplyr::filter(.data$GENE== f.gene)
+    resistance = reshape2::melt(resistance, measure.vars = colnames(resistance[,6:14]))
     resistance = resistance[resistance$value != "",]
     resistance = resistance[!is.na(resistance$value),]
-    resistance = resistance %>% group_by(change) %>% arrange(value) %>% top_n(1, value) # reduces data to 1 row per mutation.
+    resistance = resistance %>% dplyr::group_by(.data$change) %>% dplyr::arrange(.data$value) %>% dplyr::top_n(1, .data$value) # reduces data to 1 row per mutation.
     
     #f.gene_colour = "Ganciclovir"
     #d.resall <- resistance[resistance$variable == f.gene_colour,]
@@ -55,25 +59,25 @@ plot_lollipop <- function(f.dat, f.gene = "UL54", global){
     d.resmuts = d.resmuts[!duplicated(d.resmuts),]
     d.resmuts$resistance = d.resall$resistance[d.resall$AA_CHANGE %in% d.resmuts$label]
     t.y <- max(d.resmuts$y)/80
-    g <- ggplot() +
+    g <- ggplot2::ggplot() +
       #must add resistance mut along bottom colour by fold change etc?
       #all res muts
-      geom_segment(data = d.resall, aes(x = aapos, xend = aapos, y = -t.y, yend = t.y, colour = resistance)) +
-      geom_hline(yintercept = 0) +
+      ggplot2::geom_segment(data = d.resall, ggplot2::aes(x = .data$aapos, xend = .data$aapos, y = -t.y, yend = t.y, colour = .data$resistance)) +
+      ggplot2::geom_hline(yintercept = 0) +
       #lollipop called res muts
-      geom_segment( data = d.resmuts, aes(x=x, xend=x, y=0, yend=y, colour = resistance)) +
-      geom_point(data = d.resmuts, aes(x = x, y = y, colour = "Sample Mutations" , size = 8), show.legend=FALSE) +
-      geom_text(data = d.resmuts, aes(x = x, y = y, label=label), angle = 0, nudge_y = 1)  + 
-      theme_light() +
-      theme(
-        panel.grid.major.x = element_blank(),
-        panel.border = element_blank(),
-        axis.ticks.x = element_blank(),
+      ggplot2::geom_segment( data = d.resmuts, ggplot2::aes(x = .data$x, xend = .data$x, y = 0, yend = .data$y, colour = .data$resistance)) +
+      ggplot2::geom_point(data = d.resmuts, ggplot2::aes(x = .data$x, y = .data$y, colour = "Sample Mutations" , size = 8), show.legend=FALSE) +
+      ggplot2::geom_text(data = d.resmuts, ggplot2::aes(x = .data$x, y = .data$y, label = .data$label), angle = 0, nudge_y = 1)  + 
+      ggplot2::theme_light() +
+      ggplot2::theme(
+        panel.grid.major.x = ggplot2::element_blank(),
+        panel.border = ggplot2::element_blank(),
+        axis.ticks.x = ggplot2::element_blank(),
         legend.position="bottom"
       ) +
-      xlab(paste(f.gene, "AA location")) +
-      ylab("Mutation Frequency") +
-      guides(colour=guide_legend(title="Mutation Association"))
+      ggplot2::xlab(paste(f.gene, "AA location")) +
+      ggplot2::ylab("Mutation Frequency") +
+      ggplot2::guides(colour = ggplot2::guide_legend(title="Mutation Association"))
     
   }else{
     g <- NULL

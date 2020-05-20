@@ -101,54 +101,57 @@ shinyServer(function(input, output, session) {
   output$res.plot.dbheatmap <- renderPlot({
     # plots as a heatmap, the amount of dat we have per gene, per drug.
     # //todo - currently records the number of data points, could record mean value etc
-    resistance = read.csv(global$res_table, header = TRUE,na.strings = c("", "NA"), stringsAsFactors = F)
-    resistance = melt(resistance, measure.vars = colnames(resistance[,6:14]))
+    resistance = utils::read.csv(global$res_table, header = TRUE,na.strings = c("", "NA"), stringsAsFactors = F)
+    resistance = reshape2::melt(resistance, measure.vars = colnames(resistance[,6:14]))
     resistance = resistance[resistance$value != "",]
     resistance = resistance[!is.na(resistance$value),]
-    resistance$value = str_replace(resistance$value, ">", "")
-    resistance$value = str_replace(resistance$value, ",.{1,5}", "")
+    resistance$value = stringr::str_replace(resistance$value, ">", "")
+    resistance$value = stringr::str_replace(resistance$value, ",.{1,5}", "")
     resistance = resistance[resistance$value > 1,]
     
     resistance = reshape2::dcast(resistance, GENE ~ variable,fun.aggregate = length)
     resistance = reshape2::melt(resistance, id.vars = "GENE")
     resistance$Number_of_entries= resistance$value
     resistance$Drug = resistance$variable
-    g = ggplot(resistance, aes(x = Drug, y = GENE, fill = Number_of_entries)) +
-      geom_tile() +
-      theme_classic() +
-      scale_fill_gradient(low="white", high="red") +
-      theme(axis.text.x = element_text(angle = 45,vjust = 0.5))
+    g = ggplot2::ggplot(data = resistance) +
+      ggplot2::geom_tile(ggplot2::aes(x = .data$Drug, y = .data$GENE, fill = .data$Number_of_entries)) +
+      ggplot2::theme_classic() +
+      ggplot2::scale_fill_gradient(low="white", high="red") +
+      ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 45,vjust = 0.5)) +
+      ggplot2::xlab("Drug") +
+      ggplot2::ylab("Gene") +
+      ggplot2::guides(fill = ggplot2::guide_legend(title="Number of entries"))
     return(g)
   })
   
 
-  output$vcf.plot.res <- renderPlot({
-    validate(
-     need(input$vcf.file != "", "Please load a file")
-    )
-    #if (is.null(input$vcf.file)){
-    #  return(NULL)}
-    if (nrow(vcf.d.res()) == 0){ # if no resistance data was identified
-      return(NULL)
-    }
-    # plot resistance muts
-    coding_df_res_resistance <- vcf.d.res()
-    coding_df_res_resistance$freq <- readr::parse_number(coding_df_res_resistance$freq)
-    
-    if(is.null(coding_df_res_resistance$time_point)){
-      g <- ggplot( coding_df_res_resistance ,aes(x = "mutations", y=freq,fill=factor(change)))
-    }else{
-      g <- ggplot( coding_df_res_resistance ,aes(x=time_point,y=freq,fill=factor(change)))
-    }
-    g <- g +
-      geom_bar(position="dodge",stat="identity") +
-      scale_fill_discrete(drop=FALSE) +
-      scale_x_discrete(drop=FALSE) +
-      theme_bw() +
-      labs(fill = "Resistance")
-    # ggsave(plot = g, filename = paste("session",global$date, session$token, "res_table.png", sep = "/"), device = "png")
-    return(g)
-  })
+  # output$vcf.plot.res <- renderPlot({
+  #   validate(
+  #    need(input$vcf.file != "", "Please load a file")
+  #   )
+  #   #if (is.null(input$vcf.file)){
+  #   #  return(NULL)}
+  #   if (nrow(vcf.d.res()) == 0){ # if no resistance data was identified
+  #     return(NULL)
+  #   }
+  #   # plot resistance muts
+  #   coding_df_res_resistance <- vcf.d.res()
+  #   coding_df_res_resistance$freq <- readr::parse_number(coding_df_res_resistance$freq)
+  #   
+  #   if(is.null(coding_df_res_resistance$time_point)){
+  #     g <- ggplot( coding_df_res_resistance ,aes(x = "mutations", y=freq,fill=factor(change)))
+  #   }else{
+  #     g <- ggplot( coding_df_res_resistance ,aes(x=time_point,y=freq,fill=factor(change)))
+  #   }
+  #   g <- g +
+  #     geom_bar(position="dodge",stat="identity") +
+  #     scale_fill_discrete(drop=FALSE) +
+  #     scale_x_discrete(drop=FALSE) +
+  #     theme_bw() +
+  #     labs(fill = "Resistance")
+  #   # ggsave(plot = g, filename = paste("session",global$date, session$token, "res_table.png", sep = "/"), device = "png")
+  #   return(g)
+  # })
   
   
   ### lollipops
@@ -156,7 +159,7 @@ shinyServer(function(input, output, session) {
   # ## ul54 ##
   output$vcf.title.UL54 <- renderText({
     mut <- data.frame(vcf.d.res(),stringsAsFactors = F)
-    if(length(grep(unique(mut$Gene), pattern = "UL54", session)) > 0){
+    if(length(base::grep(unique(mut$Gene), pattern = "UL54", session)) > 0){
       paste("Resistance mutations in UL54 Gene")
     }
   })
@@ -169,7 +172,7 @@ shinyServer(function(input, output, session) {
   ## ul97 ##
     output$vcf.title.UL97 <- renderText({
       mut <- data.frame(vcf.d.res(),stringsAsFactors = F)
-      if(length(grep(unique(mut$Gene), pattern = "UL97")) > 0){
+      if(length(base::grep(unique(mut$Gene), pattern = "UL97")) > 0){
         paste("Resistance mutations in UL97 Gene")
       }
     })
@@ -182,7 +185,7 @@ shinyServer(function(input, output, session) {
   ## ul89 ##
   output$vcf.title.UL89 <- renderText({
     mut <- data.frame(vcf.d.res(),stringsAsFactors = F)
-    if(length(grep(unique(mut$GENE), pattern = "UL89")) > 0){
+    if(length(base::grep(unique(mut$GENE), pattern = "UL89")) > 0){
       paste("Resistance mutations in UL89 Gene")
     }
   })
@@ -196,7 +199,7 @@ shinyServer(function(input, output, session) {
   # ## ul56 ##
   output$vcf.title.UL56 <- renderText({
     mut <- data.frame(vcf.d.res(),stringsAsFactors = F)
-    if(length(grep(unique(mut$Gene), pattern = "UL56")) > 0){
+    if(length(base::grep(unique(mut$Gene), pattern = "UL56")) > 0){
       paste("Resistance mutations in UL56 Gene")
     }
   })
@@ -211,7 +214,7 @@ shinyServer(function(input, output, session) {
   # ## ul51 ##
   output$vcf.title.UL51 <- renderText({
     mut <- data.frame(vcf.d.res(),stringsAsFactors = F)
-    if(length(grep(unique(mut$Gene), pattern = "UL51")) > 0){
+    if(length(base::grep(unique(mut$Gene), pattern = "UL51")) > 0){
       paste("Resistance mutations in UL51 Gene")
     }
   })
@@ -226,7 +229,7 @@ shinyServer(function(input, output, session) {
   # ## ul27 ##
   output$vcf.title.UL27 <- renderText({
     mut <- data.frame(vcf.d.res(),stringsAsFactors = F)
-    if(length(grep(unique(mut$Gene), pattern = "UL27")) > 0){
+    if(length(base::grep(unique(mut$Gene), pattern = "UL27")) > 0){
       paste("Resistance mutations in UL27 Gene")
     }
   })
@@ -251,7 +254,7 @@ shinyServer(function(input, output, session) {
     filename = function(){paste(global$date, "_resmuts.csv", sep="")},
     content = function(filename){
       dat <- vcf.d.res()
-      write.csv(x = dat, file = filename, row.names = F)
+      utils::write.csv(x = dat, file = filename, row.names = F)
     }
   )
   
@@ -261,7 +264,7 @@ shinyServer(function(input, output, session) {
     content = function(filename){
       dat <- vcf.d.all()
       dat = add_resistance_info(f.dat = dat, resistance_table=global$res_table, all_muts = T)
-      write.csv(x = dat, file = filename, row.names = F)
+      utils::write.csv(x = dat, file = filename, row.names = F)
     }
   )
 

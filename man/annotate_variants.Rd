@@ -9,12 +9,12 @@ annotate_variants(f.dat, global)
 \arguments{
 \item{f.dat}{intermediate data.frame}
 
-\item{global}{Package object for consistent runtime variables}
+\item{global}{package object for consistent runtime variables}
 }
 \value{
 intermediate data.frame with genome level annotation
 }
 \description{
-Adds genome annotation to the intermediate resistance data.frame
+Adds genome annotation to the intermediate resistance data.frame. Codon AA change and whether synonymous or non synonymous resultants from variant for example.
 }
 \keyword{internal}

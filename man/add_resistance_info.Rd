@@ -2,7 +2,7 @@
 % Please edit documentation in R/add_resistance_info.R
 \name{add_resistance_info}
 \alias{add_resistance_info}
-\title{Reistance Genotyping}
+\title{Resistance Genotyping}
 \usage{
 add_resistance_info(f.dat, resistance_table, all_muts = F)
 }
@@ -10,11 +10,13 @@ add_resistance_info(f.dat, resistance_table, all_muts = F)
 \item{f.dat}{intermediate-annotated data.frame}
 
 \item{resistance_table}{the current version of the resistance db in csv format}
+
+\item{all_muts}{when TRUE all variants passed are returned even if they conferred no resistance}
 }
 \value{
 data.frame of resistance variants
 }
 \description{
-Calls resistance for variants provided
+Calls resistance for variants provided, joins the variant and resistance tables by mutational change columns. <GENE_A123B>
 }
 \keyword{internal}

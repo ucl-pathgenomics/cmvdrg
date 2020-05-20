@@ -120,7 +120,7 @@ Alignments are converted to VCF format using snp-sites.\n
                 br(),
                 
                 strong("Open Source"),
-                p(HTML(paste0("The database, functions and application are available as an R package ",a("in Github here.", href ="https://github.com/ucl-pathgenomics/CMV-Drug-Resistance-Database")))),
+                p(HTML(paste0("The database, functions and application are available as an R package ",a("in Github here.", href ="https://github.com/ucl-pathgenomics/cmvdrg")))),
                 br(),br(),
                 
                 strong("Ackowledgements"),

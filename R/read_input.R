@@ -1,6 +1,6 @@
 #' Handles input file
 #'
-#' This function handles a vcf, or varscan tab variant file, or pases fasta files
+#' This function handles vcf, varscan2 tab variant & fasta file formats
 #' onto handle_fasta().
 #' Returns an intermediate data.frame, which contains variant information to be
 #' annotated by annotate_variants().
@@ -18,15 +18,15 @@ read_input <- function(infile, global){
   if(tools::file_ext(infile) == "tab"){
     #if file appears as a varscan tab file
     # delimit
-    tab.dat <- read.table(file = infile, header = T, as.is = T, sep = "\t")
+    tab.dat <- utils::read.table(file = infile, header = T, as.is = T, sep = "\t")
     out <- read_varscan_data(tab.dat)
   }
   ### vcf ###
   else if(tools::file_ext(infile) == "vcf"){
     
     text <- readLines(infile)
-    start <- grep('chrom',ignore.case = T, text)
-    vcf = read.delim(infile, sep = "\t", as.is = T, skip = start - 1)
+    start <- base::grep('chrom',ignore.case = T, text)
+    vcf = utils::read.delim(infile, sep = "\t", as.is = T, skip = start - 1)
 
     if(stringr::str_count(string = vcf[1,9], pattern = ":") > 0){ # if has a format column & genotype column, split to extract ref.count, var.count per position
       vcf.num_format = as.numeric(length(unlist(strsplit(vcf[1,9], split=":"))))
@@ -39,14 +39,14 @@ read_input <- function(infile, global){
         if(nchar(ref) > 1){#if deletion
           out.ref = var
           out.var = ref
-          substr(out.var, 1, 1) <- "-"
+          base::substr(out.var, 1, 1) <- "-"
           vcf$REF[i] = out.ref
           vcf$ALT[i] = out.var
         }
         if(nchar(var) > 1){#if insertion
           out.ref = ref
           out.var = var
-          substr(out.var, 1, 1) <- "+"
+          base::substr(out.var, 1, 1) <- "+"
           vcf$REF[i] = out.ref
           vcf$ALT[i] = out.var
         }
@@ -72,14 +72,14 @@ read_input <- function(infile, global){
         if(nchar(ref) > 1){#if deletion
           out.ref = var
           out.var = ref
-          substr(out.var, 1, 1) <- "-"
+          base::substr(out.var, 1, 1) <- "-"
           vcf$REF[i] = out.ref
           vcf$ALT[i] = out.var
         }
         if(nchar(var) > 1){#if insertion
           out.ref = ref
           out.var = var
-          substr(out.var, 1, 1) <- "+"
+          base::substr(out.var, 1, 1) <- "+"
           vcf$REF[i] = out.ref
           vcf$ALT[i] = out.var
         }
@@ -111,8 +111,8 @@ read_input <- function(infile, global){
     }
     vcf_file = handle_fasta(fasta_in = infile, fasta_out, fasta_ref = global$path_fasta_file) 
     text <- readLines(vcf_file)
-    start <- grep('chrom',ignore.case = T, text)
-    vcf = read.delim(vcf_file, sep = "\t", as.is = T, skip = start - 1)
+    start <- base::grep('chrom',ignore.case = T, text)
+    vcf = utils::read.delim(vcf_file, sep = "\t", as.is = T, skip = start - 1)
     
     # if has a format column & genotype column, split to extract ref.count, var.count per position
     for(i in 1:nrow(vcf)){#clean up vcf indel format to be as in varscan tab
@@ -121,14 +121,14 @@ read_input <- function(infile, global){
       if(nchar(ref) > 1){#if deletion
         out.ref = var
         out.var = ref
-        substr(out.var, 1, 1) <- "-"
+        base::substr(out.var, 1, 1) <- "-"
         vcf$REF[i] = out.ref
         vcf$ALT[i] = out.var
       }
       if(nchar(var) > 1){#if insertion
         out.ref = ref
         out.var = var
-        substr(out.var, 1, 1) <- "+"
+        base::substr(out.var, 1, 1) <- "+"
         vcf$REF[i] = out.ref
         vcf$ALT[i] = out.var
       }

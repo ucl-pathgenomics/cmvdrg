@@ -9,6 +9,10 @@ call_resistance(infile = system.file("testdata", "A10.vcf", package =
 }
 \arguments{
 \item{infile}{the input fasta, vcf or varscan.tab file}
+
+\item{all_mutations}{when FALSE only recognised resistant variants present are returned.}
+
+\item{outdir}{for fasta input files intermediate alignment fasta & vcf files are generated, this defines the directory they are saved to. "out.fasta" "out.vcf"}
 }
 \value{
 A data.frame containing resistance information for variants identified
@@ -16,7 +20,7 @@ A data.frame containing resistance information for variants identified
 \description{
 Command line version of the website application
 Takes as input a VCF, varscan tab or fasta file.
-The program assumes variant files are generated realative to Merlin strain.
+The program assumes variant files are generated relative to Merlin strain.
 Fasta files if not Whole Genome, or not aligned / assembled relative to Merlin 
 are Processed using MAFFT & snp-sites.
 In this case the output files are returned to your working directory.
