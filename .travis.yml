@@ -4,11 +4,9 @@ language: R
 cache: packages
 sudo: false
 
-
 os:
   -linux
   -osx
-  
   
 r:
   - 3.4
@@ -16,8 +14,7 @@ r:
   - release
   - devel
   
-  
- addons:
+addons:
   apt:
     packages:
       - mafft # aligning fasta files to Merlin reference
