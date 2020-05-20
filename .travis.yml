@@ -4,21 +4,20 @@ language: R
 cache: packages
 sudo: false
 
-
-os:
-  -linux
-  -osx
-  
+jobs:
+  include:
+    - os: linux
+      dist: bionic
   
 r:
-  - 3.4
   - oldrel
-  - release
-  - devel
   
-  
- addons:
+addons:
   apt:
     packages:
       - mafft # aligning fasta files to Merlin reference
       - snp-sites # calling variants from alignment
+
+branches:
+  only:
+  - /.*/
