@@ -26,7 +26,7 @@ annotate_variants <- function(f.dat,global){
   GenomeInfoDb::isCircular(vcf) <- GenomeInfoDb::isCircular(txdb)[names(GenomeInfoDb::seqlengths(vcf))]
   #genome sequence from fasta file
   fa <- Rsamtools::FaFile(global$path_fasta_file)
-  codvar <- suppressWarnings(VariantAnnotation::locateVariants(vcf, txdb, VariantAnnotation::CodingVariants()))
+  codvar <- suppressMessages(suppressWarnings(VariantAnnotation::locateVariants(vcf, txdb, VariantAnnotation::CodingVariants())))
   coding <- suppressWarnings(VariantAnnotation::predictCoding(vcf, varAllele = varallele, txdb, seqSource=fa , ignore.strand=FALSE))
   txids <- S4Vectors::values(GenomicFeatures::transcripts(txdb))$tx_name
   names(txids) <- S4Vectors::values(GenomicFeatures::transcripts(txdb))$tx_id

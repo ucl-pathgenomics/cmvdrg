@@ -136,7 +136,6 @@ shinyServer(function(input, output, session) {
   #   }
   #   # plot resistance muts
   #   coding_df_res_resistance <- vcf.d.res()
-  #   coding_df_res_resistance$freq <- readr::parse_number(coding_df_res_resistance$freq)
   #   
   #   if(is.null(coding_df_res_resistance$time_point)){
   #     g <- ggplot( coding_df_res_resistance ,aes(x = "mutations", y=freq,fill=factor(change)))
