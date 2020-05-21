@@ -19,9 +19,9 @@ bytes](https://img.shields.io/github/languages/code-size/ucl-pathgenomics/cmvdrg
 
 cmvdrg is a R package to enable antiviral drug resistance genotyping,
 with Human Cytomegalovirus sequencing data. Accepted inputs are FASTA
-whole genomes, FASTA fragments which will be mapped to Refseq
-NC\_006273.2. NGS variant data assembled to NC\_006273.2 is accepted in
-VCF \>= ver4.0 & Varscan2 tab formats.
+(whole genomes & fragments) which will be mapped to RefSeq NC\_006273.2.
+NGS variant data assembled to NC\_006273.2 is accepted in VCF \>= ver4.0
+& Varscan2 tab formats.
 
 #### Database
 
@@ -32,19 +32,18 @@ Contains the relationships between:
     strains. “Susceptible” or “Resistant” are present if data is
     anecdotal.
   - The method for Resistance Phenotyping, including where possible
-    strian information used in marker transfer. i.e. AD169, TOWNE.
+    strain information used in marker transfer. i.e. AD169, TOWNE.
   - Publication reference, DOI, web address & review paper reference if
     used.
   - Where a co-mutation susceptibility profile is available for a known
     drug, this is included.
-  - Administrative information, last update to reference, updater,
-    whether the row is used in calculations or not. i.e. if a mutations
-    is present in a review paper, but is not traceable to given
-    references this column is set to “U” Unused, or “R” to Review.
+  - Administrative information, last update to row & whether itis used
+    in calculations or not. i.e. A “Active”" is included, where there is
+    ambiguity the status field is “U” Unused, or “R” to Review
 
 #### Web service
 
-A user friendly Shiny Applications has been bundled with this package.
+A user-friendly Shiny Applications has been bundled with this package.
 The same application is available over the internet here
 <http://51.11.13.133:3838/cmvdrg/> where the terms of use are contained.
 
@@ -58,8 +57,8 @@ You can install the current version from
 devtools::install_github("ucl-pathgenomics/cmvdrg")
 ```
 
-Dependendencies for FASTA file handling are MAFFT and SNP-Sites
-available preffereably via conda. snp-sites \>= 2.3 has been tested.
+Dependencies for FASTA file handling are MAFFT and SNP-Sites available
+preferably via conda. snp-sites \>= 2.3 has been tested.
 
 ``` bash
 conda config --add channels bioconda
@@ -72,11 +71,12 @@ conda install mafft
 ``` r
 library("cmvdrg")
 
-## call resistance mutations only
+## Call resistant only variants
+
+
 my_sample = system.file("testdata", "A10.vcf", package = "cmvdrg")
 
 
-# this calls any variants in the sample file, that are also present in the cmvdrg database.
 data = call_resistance(infile = my_sample, all_mutations = F)
 
 
@@ -96,19 +96,21 @@ print(data[,c("change", "freq", "Ganciclovir")])
 
 
 
-## call all mutations - i.e. there may be interesting non-synonymous mutants predsent in resistance genes.
-# returns all variants, with any resistance data, with annotation of protein coded for & if it coded for a change in protein sequence.
+
+## call all variants
+
 mutations_all = call_resistance(infile = my_sample, all_mutations = T)
 
 
-# to view all mutations in resistance genes we can use base R to filter.
+# to view all mutations only resistance genes we filter
 mutations_res = mutations_all[mutations_all$GENEID %in% c("UL54", "UL97", "UL27", "UL51", "UL56", "UL89"),]
 
 
-# are there any non-synonymous (DNA variants that result in a change of amino acid) variants in resistance genes.
+# are there any non-synonymous (DNA variants that result in a change of amino acid) variants in resistance genes
 mutations_res_nonsyn = mutations_res[mutations_res$CONSEQUENCE == "nonsynonymous",]
 
-# here the top 3 mutations are nonsynonymous, but have no identified resistance effect.
+
+# here the top 3 mutations are nonsynonymous, with no identified resistance effect.
 head(mutations_res_nonsyn[,c(1,8,21,32:40)])
 #>           change   freq   CONSEQUENCE Ganciclovir Cidofovir Foscarnet
 #> 996    UL51_T47M 99.88% nonsynonymous        <NA>      <NA>      <NA>

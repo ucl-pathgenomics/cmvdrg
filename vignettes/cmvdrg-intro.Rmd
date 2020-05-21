@@ -17,29 +17,30 @@ knitr::opts_chunk$set(
 ```
 
 
-```{r setup}
+```{r setup, message=F}
 library(cmvdrg)
 ```
 
 
 ## Call resistance mutations from cmvdrg
-```{r}
-# load some test data, bundled in the package
+
+```{r, message=F}
+# load some test data, bundled in the package. also included: A10.fasta A10.tab A10_fragment.fasta
 my_sample = system.file("testdata", "A10.vcf", package = "cmvdrg")
 
-# this calls any variants in your sample, that are also present in the cmvdrg database.
+# call variants from the file also present in the cmvdrg database.
 data = call_resistance(infile = my_sample, all_mutations = F)
 
-# view the first few lines, there are a lot of columns!
-head(data)
+# highlight resistance to Ganciclovir
+print(data[,c("change", "freq", "Ganciclovir")])
 
 ```
 
 
 ## View all mutations
 
-It may be the case that your sequences contain non synonymous mutations in resistance genes, that may confer changes in resultant protein. Although there are a large number of mutations accounted for in this databse, ofcourse there is a possiblity to observe something novel. The call_resistance function allows for these sorts of questions.
-```{r}
+It may be the case that your sequences contain nonsynonymous mutations in resistance genes, that may confer changes in resultant protein. Although there are many mutations accounted for in this database, of course there is a possibility to observe something novel. The call_resistance function allows for these sorts of questions.
+```{r, message=F}
 
 # returns all variants, with any resistance data, with annotation of protein coded for & if it coded for a change in protein sequence.
 mutations_all = call_resistance(infile = my_sample, all_mutations = T)
@@ -52,9 +53,22 @@ mutations_res = mutations_all[mutations_all$GENEID %in% c("UL54", "UL97", "UL27"
 # are there any non-synonymous (DNA variants that result in a change of amino acid) variants in resistance genes.
 mutations_res_nonsyn = mutations_res[mutations_res$CONSEQUENCE == "nonsynonymous",]
 
+
+# here the top 3 mutations are nonsynonymous, with no identified resistance effect.
+head(mutations_res_nonsyn)
+
 ```
 
 as you can see, there are a number of variants in resistance genes that result in a change of protein sequence, and may deserve attention.
+
+## Visualise
+
+```{r}
+
+# Generate a condensed output for the sample
+make_clin_table(data)
+
+```
 
 
 
