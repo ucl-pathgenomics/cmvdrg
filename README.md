@@ -6,7 +6,7 @@
 <!-- badges: start -->
 
 [![Travis build
-status](https://travis-ci.org/ucl-pathgenomics/cmvdrg.svg?branch=master)](https://travis-ci.org/ucl-pathgenomics/cmvdrg)
+status](https://travis-ci.com/ucl-pathgenomics/cmvdrg.svg?branch=master)](https://travis-ci.com/ucl-pathgenomics/cmvdrg)
 [![minimal R
 version](https://img.shields.io/badge/R%3E%3D-3.4.0-6666ff.svg)](https://cran.r-project.org/)
 ![GitHub repo
