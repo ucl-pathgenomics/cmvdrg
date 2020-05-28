@@ -49,8 +49,8 @@ plot_lollipop <- function(f.dat, f.gene = "UL54", global){
     #d.resall$resistance <-as.character(cut(as.numeric(d.resall$value), c(0,1,1.5,99999999), right=FALSE, labels=c("none", "low", "high")))
     # no need to alter "sus.." or "res.."
     d.resall$resistance = d.resall$value
-    d.resall$resistance[d.resall$resistance > 1 & d.resall$resistance != "Resistant" & d.resall$resistance != "Susceptible"] = "Resistant"
-    d.resall$resistance[d.resall$resistance <= 1 & d.resall$resistance != "Resistant" & d.resall$resistance != "Susceptible"] = "Susceptible"
+    d.resall$resistance[d.resall$resistance > 2 & d.resall$resistance != "Resistant" & d.resall$resistance != "Susceptible"] = "Resistant"
+    d.resall$resistance[d.resall$resistance <= 2 & d.resall$resistance != "Resistant" & d.resall$resistance != "Susceptible"] = "Susceptible"
 
     
     d.resmuts <- data.frame(x = mut_res$PROTEINLOC,
@@ -67,7 +67,14 @@ plot_lollipop <- function(f.dat, f.gene = "UL54", global){
       #lollipop called res muts
       ggplot2::geom_segment( data = d.resmuts, ggplot2::aes(x = .data$x, xend = .data$x, y = 0, yend = .data$y, colour = .data$resistance)) +
       ggplot2::geom_point(data = d.resmuts, ggplot2::aes(x = .data$x, y = .data$y, colour = "Sample Mutations" , size = 8), show.legend=FALSE) +
-      ggplot2::geom_text(data = d.resmuts, ggplot2::aes(x = .data$x, y = .data$y, label = .data$label), angle = 0, nudge_y = 1)  + 
+      #ggplot2::geom_text(data = d.resmuts, ggplot2::aes(x = .data$x, y = .data$y, label = .data$label), angle = 0, nudge_y = 1)  + 
+      ggrepel::geom_text_repel(data = d.resmuts, ggplot2::aes(x = .data$x, y = .data$y, label = .data$label),
+                               point.padding = 0.2,
+                               nudge_x = .15,
+                               nudge_y = .5,
+                               segment.curvature = -1e-20,
+                               ylim = c(-Inf, Inf)
+      ) +
       ggplot2::theme_light() +
       ggplot2::theme(
         panel.grid.major.x = ggplot2::element_blank(),
@@ -75,9 +82,11 @@ plot_lollipop <- function(f.dat, f.gene = "UL54", global){
         axis.ticks.x = ggplot2::element_blank(),
         legend.position="bottom"
       ) +
+      ggplot2::ylim(0,100) + # force y axis.
       ggplot2::xlab(paste(f.gene, "AA location")) +
       ggplot2::ylab("Mutation Frequency") +
       ggplot2::guides(colour = ggplot2::guide_legend(title="Mutation Association"))
+    
     
   }else{
     g <- NULL

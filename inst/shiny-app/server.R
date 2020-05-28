@@ -89,9 +89,16 @@ shinyServer(function(input, output, session) {
     dat <- vcf.d.res()
     #full data is saved and user can DL
     #we really only need to present some of these columns
-    dat = dat[,c(28,9,10,8,26,27,29,30,31,32:40,42,43,45,46,47,48)]
-    dat[,19] =     paste0("<a href='",  dat[,20], "' target='_blank'>",substr(dat[,19],1,20),"</a>")
-    dat[,20] = NULL
+    dat = data.frame( Gene = dat$GENE, AA_change = dat$aachange, Freq = dat$freq, "Ref_Var_count" = paste(dat$RefCount,	dat$VarCount, sep = "_"),
+                      Ref_pos = dat$start, Ganciclovir = dat$Ganciclovir, Cidofovir = dat$Cidofovir, Foscarnet = dat$Foscarnet,
+                      Brincidofovir = dat$Brincidofovir, Letermovir = dat$Letermovir, Tomeglovir = dat$Tomeglovir, GW275175 = dat$GW275175,
+                      Maribavir = dat$Maribavir, Cyclopropavir = dat$Cyclopropavir, 
+                      Reference = dat$REF_TITLE, Ref_link = dat$REF_LINK, Test_method = dat$TEST_METHOD, Test_method_Class = dat$TM_CLASS, 
+                      co_gene = dat$co.gene, co_AA = dat$co.AA
+    )
+    #dat = dat[,c(28,9,10,8,26,27,29,30,31,32:40,42,43,45,46,47,48)]
+    dat$Reference = paste0("<a href='",  dat$Ref_link, "' target='_blank'>",substr(dat$Reference,1,20),"</a>")
+    dat$Ref_link= NULL
     #dat <- reshape2::dcast(dat, GENE + AA_CHANGE + freq ~ variable)
     }
     return(dat[,])
