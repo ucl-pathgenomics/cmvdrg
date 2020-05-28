@@ -82,7 +82,7 @@ plot_lollipop <- function(f.dat, f.gene = "UL54", global){
         axis.ticks.x = ggplot2::element_blank(),
         legend.position="bottom"
       ) +
-      ggplot2::ylim(0,100) + # force y axis.
+      ggplot2::ylim(-2,100) + # force y axis. alow for db x axis lines
       ggplot2::xlab(paste(f.gene, "AA location")) +
       ggplot2::ylab("Mutation Frequency") +
       ggplot2::guides(colour = ggplot2::guide_legend(title="Mutation Association"))
