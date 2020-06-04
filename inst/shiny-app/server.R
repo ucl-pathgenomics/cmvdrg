@@ -58,7 +58,7 @@ shinyServer(function(input, output, session) {
     dat2 = vcf.d.all()
 
     ### add res info
-    dat3 <- add_resistance_info(f.dat = dat2, resistance_table=global$res_table, all_muts = F)
+    dat3 <- add_resistance_info(f.dat = dat2, resistance_table=global$res_table, all_muts = F, anecdotal = input$vcf.anecdotal)
     
     return(dat3)
   })
@@ -89,16 +89,16 @@ shinyServer(function(input, output, session) {
     dat <- vcf.d.res()
     #full data is saved and user can DL
     #we really only need to present some of these columns
-    dat = data.frame( Gene = dat$GENE, AA_change = dat$aachange, Freq = dat$freq, "Ref_Var_count" = paste(dat$RefCount,	dat$VarCount, sep = "_"),
-                      Ref_pos = dat$start, Ganciclovir = dat$Ganciclovir, Cidofovir = dat$Cidofovir, Foscarnet = dat$Foscarnet,
+    dat = data.frame( gene = dat$gene, aa_change = dat$aa_change, freq = dat$freq, "ref_var_count" = paste(dat$RefCount,	dat$VarCount, sep = "_"),
+                      ref_pos = dat$start, Ganciclovir = dat$Ganciclovir, Cidofovir = dat$Cidofovir, Foscarnet = dat$Foscarnet,
                       Brincidofovir = dat$Brincidofovir, Letermovir = dat$Letermovir, Tomeglovir = dat$Tomeglovir, GW275175 = dat$GW275175,
                       Maribavir = dat$Maribavir, Cyclopropavir = dat$Cyclopropavir, 
-                      Reference = dat$REF_TITLE, Ref_link = dat$REF_LINK, Test_method = dat$TEST_METHOD, Test_method_Class = dat$TM_CLASS, 
-                      co_gene = dat$co.gene, co_AA = dat$co.AA
+                      reference = dat$ref_title, ref_link = dat$ref_link, test_method = dat$test_method, test_method_class = dat$tm_class, 
+                      co_gene = dat$co_gene, co_aa = dat$co_aa
     )
     #dat = dat[,c(28,9,10,8,26,27,29,30,31,32:40,42,43,45,46,47,48)]
-    dat$Reference = paste0("<a href='",  dat$Ref_link, "' target='_blank'>",substr(dat$Reference,1,20),"</a>")
-    dat$Ref_link= NULL
+    dat$reference = paste0("<a href='",  dat$ref_link, "' target='_blank'>",substr(dat$reference,1,20),"</a>")
+    dat$ref_link= NULL
     #dat <- reshape2::dcast(dat, GENE + AA_CHANGE + freq ~ variable)
     }
     return(dat[,])
@@ -109,6 +109,9 @@ shinyServer(function(input, output, session) {
     # plots as a heatmap, the amount of dat we have per gene, per drug.
     # //todo - currently records the number of data points, could record mean value etc
     resistance = utils::read.csv(global$res_table, header = TRUE,na.strings = c("", "NA"), stringsAsFactors = F)
+    if (input$vcf.anecdotal == F) {
+      resistance = resistance[resistance$tm_class == 'in vitro',]
+    }
     resistance = reshape2::melt(resistance, measure.vars = colnames(resistance[,6:14]))
     resistance = resistance[resistance$value != "",]
     resistance = resistance[!is.na(resistance$value),]
@@ -116,12 +119,12 @@ shinyServer(function(input, output, session) {
     resistance$value = stringr::str_replace(resistance$value, ",.{1,5}", "")
     resistance = resistance[resistance$value > 1,]
     
-    resistance = reshape2::dcast(resistance, GENE ~ variable,fun.aggregate = length)
-    resistance = reshape2::melt(resistance, id.vars = "GENE")
+    resistance = reshape2::dcast(resistance, gene ~ variable,fun.aggregate = length)
+    resistance = reshape2::melt(resistance, id.vars = "gene")
     resistance$Number_of_entries= resistance$value
     resistance$Drug = resistance$variable
     g = ggplot2::ggplot(data = resistance) +
-      ggplot2::geom_tile(ggplot2::aes(x = .data$Drug, y = .data$GENE, fill = .data$Number_of_entries)) +
+      ggplot2::geom_tile(ggplot2::aes(x = .data$Drug, y = .data$gene, fill = .data$Number_of_entries)) +
       ggplot2::theme_classic() +
       ggplot2::scale_fill_gradient(low="white", high="red") +
       ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 45,vjust = 0.5)) +
@@ -269,7 +272,7 @@ shinyServer(function(input, output, session) {
     filename = function(){paste(global$date, "_allmuts.csv", sep="")},
     content = function(filename){
       dat <- vcf.d.all()
-      dat = add_resistance_info(f.dat = dat, resistance_table=global$res_table, all_muts = T)
+      dat = add_resistance_info(f.dat = dat, resistance_table=global$res_table, all_muts = T, anecdotal = input$vcf.anecdotal)
       utils::write.csv(x = dat, file = filename, row.names = F)
     }
   )

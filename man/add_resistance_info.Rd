@@ -4,7 +4,8 @@
 \alias{add_resistance_info}
 \title{Resistance Genotyping}
 \usage{
-add_resistance_info(f.dat, resistance_table, all_muts = F)
+add_resistance_info(f.dat, resistance_table, all_muts = FALSE,
+  anecdotal = FALSE)
 }
 \arguments{
 \item{f.dat}{intermediate-annotated data.frame}
@@ -12,6 +13,8 @@ add_resistance_info(f.dat, resistance_table, all_muts = F)
 \item{resistance_table}{the current version of the resistance db in csv format}
 
 \item{all_muts}{when TRUE all variants passed are returned even if they conferred no resistance}
+
+\item{anecdotal}{include anectodat database entries in returned results?}
 }
 \value{
 data.frame of resistance variants

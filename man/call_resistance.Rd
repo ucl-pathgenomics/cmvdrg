@@ -5,12 +5,15 @@
 \title{CMV Resistance Genotyping from command line}
 \usage{
 call_resistance(infile = system.file("testdata", "A10.vcf", package =
-  "cmvdrg"), all_mutations = FALSE, outdir = "")
+  "cmvdrg"), all_mutations = FALSE, inc_anecdotal = FALSE,
+  outdir = "")
 }
 \arguments{
 \item{infile}{the input fasta, vcf or varscan.tab file}
 
 \item{all_mutations}{when FALSE only recognised resistant variants present are returned.}
+
+\item{inc_anecdotal}{include anectodat database entries in returned results?}
 
 \item{outdir}{for fasta input files intermediate alignment fasta & vcf files are generated, this defines the directory they are saved to. "out.fasta" "out.vcf"}
 }

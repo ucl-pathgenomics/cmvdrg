@@ -35,9 +35,9 @@ plot_lollipop <- function(f.dat, f.gene = "UL54", global){
     mut_res$depth <- mut_res$RefCount + mut_res$VarCount 
     resistance_table=global$res_table
     resistance <- utils::read.csv(resistance_table, header = TRUE,as.is = TRUE)
-    resistance$change <- paste(resistance$GENE,resistance$AA_CHANGE,sep="_")
-    resistance$aapos <- readr::parse_number(resistance$AA_CHANGE)
-    resistance <- resistance %>% dplyr::filter(.data$GENE== f.gene)
+    resistance$change <- paste(resistance$gene,resistance$aa_change,sep="_")
+    resistance$aapos <- readr::parse_number(resistance$aa_change)
+    resistance <- resistance %>% dplyr::filter(.data$gene== f.gene)
     resistance = reshape2::melt(resistance, measure.vars = colnames(resistance[,6:14]))
     resistance = resistance[resistance$value != "",]
     resistance = resistance[!is.na(resistance$value),]
@@ -49,15 +49,15 @@ plot_lollipop <- function(f.dat, f.gene = "UL54", global){
     #d.resall$resistance <-as.character(cut(as.numeric(d.resall$value), c(0,1,1.5,99999999), right=FALSE, labels=c("none", "low", "high")))
     # no need to alter "sus.." or "res.."
     d.resall$resistance = d.resall$value
-    d.resall$resistance[d.resall$resistance > 2 & d.resall$resistance != "Resistant" & d.resall$resistance != "Susceptible"] = "Resistant"
-    d.resall$resistance[d.resall$resistance <= 2 & d.resall$resistance != "Resistant" & d.resall$resistance != "Susceptible"] = "Susceptible"
+    d.resall$resistance[d.resall$resistance > 2 & d.resall$resistance != "Resistant" & d.resall$resistance != "Polymorphism"] = "Resistant"
+    d.resall$resistance[d.resall$resistance <= 2 & d.resall$resistance != "Resistant" & d.resall$resistance != "Polymorphism"] = "Polymorphism"
 
     
     d.resmuts <- data.frame(x = mut_res$PROTEINLOC,
                             y = readr::parse_number(mut_res$freq),
                             label = mut_res$aachange)
     d.resmuts = d.resmuts[!duplicated(d.resmuts),]
-    d.resmuts$resistance = d.resall$resistance[d.resall$AA_CHANGE %in% d.resmuts$label]
+    d.resmuts$resistance = d.resall$resistance[d.resall$aa_change %in% d.resmuts$label]
     t.y <- max(d.resmuts$y)/80
     g <- ggplot2::ggplot() +
       #must add resistance mut along bottom colour by fold change etc?
@@ -72,7 +72,6 @@ plot_lollipop <- function(f.dat, f.gene = "UL54", global){
                                point.padding = 0.2,
                                nudge_x = .15,
                                nudge_y = .5,
-                               segment.curvature = -1e-20,
                                ylim = c(-Inf, Inf)
       ) +
       ggplot2::theme_light() +

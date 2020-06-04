@@ -9,11 +9,12 @@
 #'
 #' @param infile the input fasta, vcf or varscan.tab file
 #' @param all_mutations when FALSE only recognised resistant variants present are returned.
+#' @param inc_anecdotal include anectodat database entries in returned results?
 #' @param outdir for fasta input files intermediate alignment fasta & vcf files are generated, this defines the directory they are saved to. "out.fasta" "out.vcf"
 #' @return A data.frame containing resistance information for variants identified
 #' @export
 
-call_resistance = function(infile = system.file("testdata",  "A10.vcf", package = "cmvdrg"), all_mutations = FALSE, outdir = ""){
+call_resistance = function(infile = system.file("testdata",  "A10.vcf", package = "cmvdrg"), all_mutations = FALSE, inc_anecdotal = FALSE, outdir = ""){
   
   #package variables
   global = list()
@@ -33,7 +34,7 @@ call_resistance = function(infile = system.file("testdata",  "A10.vcf", package 
   dat2 <- annotate_variants(f.dat = dat1, global = global)
   
   ### add res info
-  dat3 <- add_resistance_info(f.dat = dat2, resistance_table=global$res_table, all_muts = all_mutations)
+  dat3 <- add_resistance_info(f.dat = dat2, resistance_table=global$res_table, all_muts = all_mutations, anecdotal = inc_anecdotal)
   
   dat3=dat3
   

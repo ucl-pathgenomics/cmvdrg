@@ -22,7 +22,7 @@ make_clin_table = function(f.dat){
   dat = data.frame(matrix(nrow = 2, ncol = ncol(dat_drug)))
   colnames(dat) = colnames(dat_drug)
   rownames(dat) = c("Resistance Phenotype", "Evidence Strength")
-  dat_drug = f.dat[,c(32:40, which(names(f.dat)=="TM_CLASS"))]
+  dat_drug = f.dat[,c(32:40, which(names(f.dat)=="tm_class"))]
   
   # write the table
   # for each drug, see if there are numbers (fold changes are best quality, then in vitro res/sus then anything else)
@@ -51,19 +51,19 @@ make_clin_table = function(f.dat){
       }else if(res.pheno <5 && res.pheno >= 2){
         res.pheno = "Low level"
       }else if(res.pheno < 2){
-        res.pheno = "Susceptible"
+        res.pheno = "No Resistance"
       }
     res.ev = "good, in vitro"
-    #else if there are only 
+    #else if there are only anecdotal data
     }else if(length(base::grepl(pattern = "[a-z]", t.dat[,1])[base::grepl(pattern = "[a-z]", t.dat[,1])==TRUE]) > 0){
       res.pheno = t.dat[base::grepl(pattern = "[a-z]", t.dat[,1]),]
-      count_sus = base::grepl(pattern = "usc", res.pheno[,1])
+      count_sus = base::grepl(pattern = "Polymorphism", res.pheno[,1])
       count_sus = length(count_sus[count_sus==TRUE])
-      count_res = base::grepl(pattern = "esis", res.pheno[,1])
+      count_res = base::grepl(pattern = "Resistant", res.pheno[,1])
       count_res = length(count_res[count_res==TRUE])
       
       if(count_sus > 0 && count_res == 0){
-        res.pheno = "Susceptible"
+        res.pheno = "No Resistance"
       }else if(count_sus == 0 && count_res > 0){
         res.pheno = "Resistant, magnitude unknown "
       }else{
@@ -88,7 +88,7 @@ make_clin_table = function(f.dat){
   
   #js <- "(/High/).test(value) ? 'red' : (/Low/).test(value) ? 'yellow' : (/Susc/).test(value) ? 'green' : ''"
   #js <- "(/High/).test(value) ? '#ff6f69' : (/Moderate/).test(value) ? '#ff6f69' : (/Low/).test(value) ? '#ffcc5c' : (/Susc/).test(value) ? '#96ceb4' : (/vitro/).test(value) ? '#96ceb4' : (/anecdotal/).test(value) ? '#ffcc5c' :''"
-  js <- "(/High/).test(value) ? '#C34318' : (/Moderate/).test(value) ? '#F68C1B' : (/Low/).test(value) ? '#FFC605' : (/Susc/).test(value) ? '#759F2F' : (/vitro/).test(value) ? '#759F2F' : (/anecdotal/).test(value) ? '#F68C1B' :''"
+  js <- "(/High/).test(value) ? '#C34318' : (/Moderate/).test(value) ? '#F68C1B' : (/Low/).test(value) ? '#FFC605' : (/No Resistance/).test(value) ? '#759F2F' : (/vitro/).test(value) ? '#759F2F' : (/anecdotal/).test(value) ? '#F68C1B' :''"
   
   
   out = DT::datatable(dat, options = list(dom = 't')) %>% 
