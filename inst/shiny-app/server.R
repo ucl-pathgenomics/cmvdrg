@@ -258,6 +258,19 @@ shinyServer(function(input, output, session) {
     print(session$request$REMOTE_ADDR)
   })
   
+  # downlaod buttons
+  output$vcf.o.res1 <- renderUI({
+    req(vcf.d.res())
+    downloadButton("vcf.o.res", "download resistance data")
+  })
+  
+  output$vcf.o.all1 <- renderUI({
+    req(vcf.d.res())
+    downloadButton("vcf.o.all", "download all variants data")
+  })
+  
+  
+  
   # debug in brownser app mode
   output$vcf.o.res <- downloadHandler(
     filename = function(){paste(global$date, "_resmuts.csv", sep="")},

@@ -4,4 +4,5 @@
 .Ruserdata
 .Rproj.user
 inst/doc
-
+inst/shiny-app/*.fasta
+inst/shiny-app/*.vcf
