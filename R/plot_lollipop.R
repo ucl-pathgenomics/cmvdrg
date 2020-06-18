@@ -58,7 +58,7 @@ plot_lollipop <- function(f.dat, f.gene = "UL54", global){
                             label = mut_res$aachange)
     d.resmuts = d.resmuts[!duplicated(d.resmuts),]
     d.resmuts$resistance = d.resall$resistance[d.resall$aa_change %in% d.resmuts$label]
-    t.y <- max(d.resmuts$y)/80
+    t.y <- 1 # updated to hard as now fixed y axis
     g <- ggplot2::ggplot() +
       #must add resistance mut along bottom colour by fold change etc?
       #all res muts
@@ -68,11 +68,16 @@ plot_lollipop <- function(f.dat, f.gene = "UL54", global){
       ggplot2::geom_segment( data = d.resmuts, ggplot2::aes(x = .data$x, xend = .data$x, y = 0, yend = .data$y, colour = .data$resistance)) +
       ggplot2::geom_point(data = d.resmuts, ggplot2::aes(x = .data$x, y = .data$y, colour = "Sample Mutations" , size = 8), show.legend=FALSE) +
       #ggplot2::geom_text(data = d.resmuts, ggplot2::aes(x = .data$x, y = .data$y, label = .data$label), angle = 0, nudge_y = 1)  + 
+      ggplot2::scale_colour_manual(values = c("#00BA38", "#F8766D", "#619CFF"),
+                          labels = c("Polymorphism", "Resistant", "Sample Mutation"), 
+                          drop = FALSE) +
       ggrepel::geom_text_repel(data = d.resmuts, ggplot2::aes(x = .data$x, y = .data$y, label = .data$label),
                                point.padding = 0.2,
-                               nudge_x = .15,
+                               nudge_x = 0,
                                nudge_y = .5,
-                               ylim = c(-Inf, Inf)
+                               segment.size = 0.2,
+                               ylim = c(-Inf, Inf),
+                               show.legend = F
       ) +
       ggplot2::theme_light() +
       ggplot2::theme(
@@ -85,6 +90,7 @@ plot_lollipop <- function(f.dat, f.gene = "UL54", global){
       ggplot2::xlab(paste(f.gene, "AA location")) +
       ggplot2::ylab("Mutation Frequency") +
       ggplot2::guides(colour = ggplot2::guide_legend(title="Mutation Association"))
+
     
     
   }else{
