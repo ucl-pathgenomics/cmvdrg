@@ -791,3 +791,9 @@ Ganciclovir",https://aac.asm.org/content/aac/62/9/e00922-18.full.pdf,"https://do
 577,HCMV,AD169,UL56,V814A,,,,,1.0 ,,,,,,Letermovir Resistance Analysis in a Clinical Trial of Cytomegalovirus Prophylaxis for Hematopoietic Stem Cell Transplant Recipients,https://academic.oup.com/jid/article/221/7/1117/5645458,https://doi.org/10.1093/infdis/jiz577,"Recombinant BAC, SEAP",in vitro,,,14/05/2020,OJCharles,,A
 578,HCMV,AD169,UL56,R816W,,,,,0.9 ,,,,,,Letermovir Resistance Analysis in a Clinical Trial of Cytomegalovirus Prophylaxis for Hematopoietic Stem Cell Transplant Recipients,https://academic.oup.com/jid/article/221/7/1117/5645458,https://doi.org/10.1093/infdis/jiz577,"Recombinant BAC, SEAP",in vitro,,,14/05/2020,OJCharles,,A
 579,HCMV,AD169,UL89,I531T,,,,,1.0,,,,,,Letermovir Resistance Analysis in a Clinical Trial of Cytomegalovirus Prophylaxis for Hematopoietic Stem Cell Transplant Recipients,https://academic.oup.com/jid/article/221/7/1117/5645458,https://doi.org/10.1093/infdis/jiz577,"Recombinant BAC, SEAP",in vitro,,,14/05/2020,OJCharles,,A
+580,HCMV,AD169,UL54,Q579I,0.16,,0.06,,,,,,,,"Hypersusceptibility of Human Cytomegalovirus to Foscarnet
+Induced by Mutations in Helices K and P of the Viral DNA
+Polymerase",https://aac.asm.org/content/aac/64/4/e01910-19.full.pdf,https://doi.org/10.1128/AAC.01910-19,"Recombinant BAC, GLuc reporter–based assay",in vitro,,,22/07/2020,OJCharles,,A
+580,HCMV,AD169,UL54,K805Q,1.0,,0.19,,,,,,,,"Hypersusceptibility of Human Cytomegalovirus to Foscarnet
+Induced by Mutations in Helices K and P of the Viral DNA
+Polymerase",https://aac.asm.org/content/aac/64/4/e01910-19.full.pdf,https://doi.org/10.1128/AAC.01910-19,"Recombinant BAC, GLuc reporter–based assay",in vitro,,,22/07/2020,OJCharles,,A
