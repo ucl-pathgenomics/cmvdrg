@@ -1,14 +1,22 @@
 # R for travis: see documentation at https://docs.travis-ci.com/user/languages/r
+# ex https://travis-ci.community/t/travis-build-ignoring-r-package-version-in-description/2431
 
 language: R
 cache: packages
 sudo: false
 dist: bionic
-
-r:
-  - 3.6
-  - release
+warnings_are_errors: false
+cran: http://cran.rstudio.com
 
 branches:
   only:
   - /.*/
+  
+r:
+  - 3.6
+  - release
+
+env:
+  global:
+    - _R_CHECK_FORCE_SUGGESTS_=false
+    - R_REMOTES_NO_ERRORS_FROM_WARNINGS=true
