@@ -37,7 +37,7 @@ Contains the relationships between:
     used.
   - Where a co-mutation susceptibility profile is available for a known
     drug, this is included.
-  - Administrative information, last update to row & whether itis used
+  - Administrative information, last update to row & whether it is used
     in calculations or not. i.e. A “Active”" is included, where there is
     ambiguity the status field is “U” Unused, or “R” to Review
 
@@ -45,7 +45,8 @@ Contains the relationships between:
 
 A user-friendly Shiny Applications has been bundled with this package.
 The same application is available over the internet here
-<http://51.11.13.133:3838/cmvdrg/> where the terms of use are contained.
+<http://cmv-resistance.ucl.ac.uk/cmvdrg/> where the terms of use are
+contained.
 
 ## Installation
 
@@ -71,7 +72,7 @@ conda install mafft
 ``` r
 library("cmvdrg")
 
-## Call resistant only variants
+## call resistant variants
 
 
 my_sample = system.file("testdata", "A10.vcf", package = "cmvdrg")
@@ -81,18 +82,8 @@ data = call_resistance(infile = my_sample, all_mutations = F)
 
 
 print(data[,c("change", "freq", "Ganciclovir")])
-#>        change   freq Ganciclovir
-#> 1  UL54_D588N   5.2%           2
-#> 2  UL54_D588N   5.2%         3.8
-#> 3  UL54_N685S   100% Susceptible
-#> 4  UL54_S655L   100% Susceptible
-#> 5  UL97_C592G 10.77%         2.9
-#> 6  UL97_C592G 10.77%           3
-#> 7  UL97_C592G 10.77%           3
-#> 8  UL97_H411Y  1.69%            
-#> 9  UL97_H411Y  1.69%         0.5
-#> 10 UL97_T409M 37.13%            
-#> 11 UL97_T409M 37.13%         0.9
+#> [1] change      freq        Ganciclovir
+#> <0 rows> (or 0-length row.names)
 
 
 
@@ -102,7 +93,7 @@ print(data[,c("change", "freq", "Ganciclovir")])
 mutations_all = call_resistance(infile = my_sample, all_mutations = T)
 
 
-# to view all mutations only resistance genes we filter
+#to view all mutations in resistance genes we can filter
 mutations_res = mutations_all[mutations_all$GENEID %in% c("UL54", "UL97", "UL27", "UL51", "UL56", "UL89"),]
 
 
@@ -112,20 +103,20 @@ mutations_res_nonsyn = mutations_res[mutations_res$CONSEQUENCE == "nonsynonymous
 
 # here the top 3 mutations are nonsynonymous, with no identified resistance effect.
 head(mutations_res_nonsyn[,c(1,8,21,32:40)])
-#>           change   freq   CONSEQUENCE Ganciclovir Cidofovir Foscarnet
-#> 996    UL51_T47M 99.88% nonsynonymous        <NA>      <NA>      <NA>
-#> 1002 UL54_A1108T 99.05% nonsynonymous        <NA>      <NA>      <NA>
-#> 1004  UL54_A692V   100% nonsynonymous        <NA>      <NA>      <NA>
-#> 1007  UL54_D588N   5.2% nonsynonymous           2       1.3       2.8
-#> 1008  UL54_D588N   5.2% nonsynonymous         3.8       2.7     3.2-9
-#> 1018  UL54_L897S 99.82% nonsynonymous        <NA>      <NA>      <NA>
+#>          change   freq   CONSEQUENCE Ganciclovir Cidofovir Foscarnet
+#> 996   UL51_A47V 99.88% nonsynonymous        <NA>      <NA>      <NA>
+#> 997  UL51_Q112H   100% nonsynonymous        <NA>      <NA>      <NA>
+#> 1004 UL54_A588T   5.2% nonsynonymous        <NA>      <NA>      <NA>
+#> 1005 UL54_A692V   100% nonsynonymous        <NA>      <NA>      <NA>
+#> 1006 UL54_A695G  1.05% nonsynonymous        <NA>      <NA>      <NA>
+#> 1009 UL54_E939D 99.78% nonsynonymous        <NA>      <NA>      <NA>
 #>      Brincidofovir Letermovir Tomeglovir GW275175 Maribavir Cyclopropavir
 #> 996             NA       <NA>         NA       NA      <NA>            NA
-#> 1002            NA       <NA>         NA       NA      <NA>            NA
+#> 997             NA       <NA>         NA       NA      <NA>            NA
 #> 1004            NA       <NA>         NA       NA      <NA>            NA
-#> 1007            NA                    NA       NA                      NA
-#> 1008            NA                    NA       NA                      NA
-#> 1018            NA       <NA>         NA       NA      <NA>            NA
+#> 1005            NA       <NA>         NA       NA      <NA>            NA
+#> 1006            NA       <NA>         NA       NA      <NA>            NA
+#> 1009            NA       <NA>         NA       NA      <NA>            NA
 
 
 ## run the shiny application

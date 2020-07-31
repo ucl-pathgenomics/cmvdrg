@@ -37,11 +37,11 @@ Contains the relationships between:
  - The method for Resistance Phenotyping, including where possible strain information used in marker transfer. i.e. AD169, TOWNE.
  - Publication reference, DOI, web address & review paper reference if used.
  - Where a co-mutation susceptibility profile is available for a known drug, this is included.
- - Administrative information, last update to row & whether itis used in calculations or not. i.e. A "Active"" is included, where there is ambiguity the status field is "U" Unused, or "R" to Review
+ - Administrative information, last update to row & whether it is used in calculations or not. i.e. A "Active"" is included, where there is ambiguity the status field is "U" Unused, or "R" to Review
 
 
 #### Web service
-A user-friendly Shiny Applications has been bundled with this package. The same application is available over the internet here [http://51.11.13.133:3838/cmvdrg/](http://51.11.13.133:3838/cmvdrg/) where the terms of use are contained.
+A user-friendly Shiny Applications has been bundled with this package. The same application is available over the internet here [http://cmv-resistance.ucl.ac.uk/cmvdrg/](http://cmv-resistance.ucl.ac.uk/cmvdrg/) where the terms of use are contained.
 
 
 ## Installation
@@ -66,7 +66,7 @@ conda install mafft
 ```{r setup, message = F}
 library("cmvdrg")
 
-## Call resistant only variants
+## call resistant variants
 
 
 my_sample = system.file("testdata", "A10.vcf", package = "cmvdrg")
@@ -85,7 +85,7 @@ print(data[,c("change", "freq", "Ganciclovir")])
 mutations_all = call_resistance(infile = my_sample, all_mutations = T)
 
 
-# to view all mutations only resistance genes we filter
+#to view all mutations in resistance genes we can filter
 mutations_res = mutations_all[mutations_all$GENEID %in% c("UL54", "UL97", "UL27", "UL51", "UL56", "UL89"),]
 
 
