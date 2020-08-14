@@ -72,10 +72,10 @@ library("cmvdrg")
 my_sample = system.file("testdata", "A10.vcf", package = "cmvdrg")
 
 
-data = call_resistance(infile = my_sample, all_mutations = F)
+data = call_resistance(infile = my_sample, all_mutations = F,inc_anecdotal = F)
 
 
-print(data[,c("change", "freq", "Ganciclovir")])
+data[ , c("change", "freq", "Ganciclovir", "Maribavir", "Foscarnet", "ref_doi")]
 
 
 

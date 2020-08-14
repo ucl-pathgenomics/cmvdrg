@@ -78,12 +78,30 @@ library("cmvdrg")
 my_sample = system.file("testdata", "A10.vcf", package = "cmvdrg")
 
 
-data = call_resistance(infile = my_sample, all_mutations = F)
+data = call_resistance(infile = my_sample, all_mutations = F,inc_anecdotal = F)
 
 
-print(data[,c("change", "freq", "Ganciclovir")])
-#> [1] change      freq        Ganciclovir
-#> <0 rows> (or 0-length row.names)
+data[ , c("change", "freq", "Ganciclovir", "Maribavir", "Foscarnet", "ref_doi")]
+#>       change   freq Ganciclovir Maribavir Foscarnet
+#> 1 UL54_D588N   5.2%           2                 2.8
+#> 2 UL54_D588N   5.2%         3.8                   9
+#> 3 UL97_C592G 10.77%           3                    
+#> 4 UL97_C592G 10.77%           3                    
+#> 5 UL97_C592G 10.77%           3                    
+#> 6 UL97_H411Y  1.69%                    18          
+#> 7 UL97_H411Y  1.69%         0.5        12          
+#> 8 UL97_T409M 37.13%         0.9        81          
+#> 9 UL97_T409M 37.13%                    90          
+#>                                           ref_doi
+#> 1                  doi: 10.1016/j.jcv.2011.01.004
+#> 2   https://doi.org/10.1016/S1386-6532(01)00160-3
+#> 3                            10.1128/AAC.00186-10
+#> 4 https://doi.org/10.1016/j.antiviral.2019.104616
+#> 5       https://dx.doi.org/10.1128%2FAAC.01259-10
+#> 6 https://doi.org/10.1016/j.antiviral.2019.104616
+#> 7                       DOI: 10.1128/JVI.01787-07
+#> 8                  https://doi.org/10.1086/518514
+#> 9 https://doi.org/10.1016/j.antiviral.2019.104616
 
 
 
@@ -103,20 +121,20 @@ mutations_res_nonsyn = mutations_res[mutations_res$CONSEQUENCE == "nonsynonymous
 
 # here the top 3 mutations are nonsynonymous, with no identified resistance effect.
 head(mutations_res_nonsyn[,c(1,8,21,32:40)])
-#>          change   freq   CONSEQUENCE Ganciclovir Cidofovir Foscarnet
-#> 996   UL51_A47V 99.88% nonsynonymous        <NA>      <NA>      <NA>
-#> 997  UL51_Q112H   100% nonsynonymous        <NA>      <NA>      <NA>
-#> 1004 UL54_A588T   5.2% nonsynonymous        <NA>      <NA>      <NA>
-#> 1005 UL54_A692V   100% nonsynonymous        <NA>      <NA>      <NA>
-#> 1006 UL54_A695G  1.05% nonsynonymous        <NA>      <NA>      <NA>
-#> 1009 UL54_E939D 99.78% nonsynonymous        <NA>      <NA>      <NA>
+#>           change   freq   CONSEQUENCE Ganciclovir Cidofovir Foscarnet
+#> 996    UL51_T47M 99.88% nonsynonymous        <NA>      <NA>      <NA>
+#> 1002 UL54_A1108T 99.05% nonsynonymous        <NA>      <NA>      <NA>
+#> 1004  UL54_A692V   100% nonsynonymous        <NA>      <NA>      <NA>
+#> 1007  UL54_D588N   5.2% nonsynonymous           2       1.3       2.8
+#> 1008  UL54_D588N   5.2% nonsynonymous         3.8       2.7         9
+#> 1018  UL54_L897S 99.82% nonsynonymous        <NA>      <NA>      <NA>
 #>      Brincidofovir Letermovir Tomeglovir GW275175 Maribavir Cyclopropavir
 #> 996             NA       <NA>         NA       NA      <NA>            NA
-#> 997             NA       <NA>         NA       NA      <NA>            NA
+#> 1002            NA       <NA>         NA       NA      <NA>            NA
 #> 1004            NA       <NA>         NA       NA      <NA>            NA
-#> 1005            NA       <NA>         NA       NA      <NA>            NA
-#> 1006            NA       <NA>         NA       NA      <NA>            NA
-#> 1009            NA       <NA>         NA       NA      <NA>            NA
+#> 1007            NA                    NA       NA                      NA
+#> 1008            NA                    NA       NA                      NA
+#> 1018            NA       <NA>         NA       NA      <NA>            NA
 
 
 ## run the shiny application
