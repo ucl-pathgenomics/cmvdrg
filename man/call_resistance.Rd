@@ -4,9 +4,12 @@
 \alias{call_resistance}
 \title{CMV Resistance Genotyping from command line}
 \usage{
-call_resistance(infile = system.file("testdata", "A10.vcf", package =
-  "cmvdrg"), all_mutations = FALSE, inc_anecdotal = FALSE,
-  outdir = "")
+call_resistance(
+  infile = system.file("testdata", "A10.vcf", package = "cmvdrg"),
+  all_mutations = FALSE,
+  inc_anecdotal = FALSE,
+  outdir = ""
+)
 }
 \arguments{
 \item{infile}{the input fasta, vcf or varscan.tab file}

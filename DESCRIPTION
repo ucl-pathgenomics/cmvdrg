@@ -43,6 +43,6 @@ Suggests:
     rmarkdown,
     testthat
 VignetteBuilder: knitr
-RoxygenNote: 6.1.1
+RoxygenNote: 7.1.0
 URL: https://github.com/ucl-pathgenomics/cmvdrg
 BugReports: https://github.com/ucl-pathgenomics/cmvdrg/issues

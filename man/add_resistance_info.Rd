@@ -4,8 +4,12 @@
 \alias{add_resistance_info}
 \title{Resistance Genotyping}
 \usage{
-add_resistance_info(f.dat, resistance_table, all_muts = FALSE,
-  anecdotal = FALSE)
+add_resistance_info(
+  f.dat,
+  resistance_table,
+  all_muts = FALSE,
+  anecdotal = FALSE
+)
 }
 \arguments{
 \item{f.dat}{intermediate-annotated data.frame}

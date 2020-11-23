@@ -3,6 +3,7 @@
 export(add_resistance_info)
 export(annotate_variants)
 export(call_resistance)
+export(cmvdrg_data)
 export(handle_fasta)
 export(make_clin_table)
 export(plot_lollipop)

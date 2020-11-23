@@ -57,6 +57,10 @@ mutations_res_nonsyn = mutations_res[mutations_res$CONSEQUENCE == "nonsynonymous
 # here the top 3 mutations are nonsynonymous, with no identified resistance effect.
 head(mutations_res_nonsyn)
 
+## view the full database
+db = cmvdrg_data()
+head(db$aa_change)
+
 ```
 
 as you can see, there are a number of variants in resistance genes that result in a change of protein sequence, and may deserve attention.
@@ -64,7 +68,6 @@ as you can see, there are a number of variants in resistance genes that result i
 ## Visualise
 
 ```{r}
-
 # Generate a condensed output for the sample
 make_clin_table(data)
 

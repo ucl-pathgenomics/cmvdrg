@@ -73,13 +73,9 @@ conda install mafft
 library("cmvdrg")
 
 ## call resistant variants
-
-
 my_sample = system.file("testdata", "A10.vcf", package = "cmvdrg")
 
-
 data = call_resistance(infile = my_sample, all_mutations = F,inc_anecdotal = F)
-
 
 data[ , c("change", "freq", "Ganciclovir", "Maribavir", "Foscarnet", "ref_doi")]
 #>       change   freq Ganciclovir Maribavir Foscarnet
@@ -90,26 +86,22 @@ data[ , c("change", "freq", "Ganciclovir", "Maribavir", "Foscarnet", "ref_doi")]
 #> 5 UL97_C592G 10.77%           3                    
 #> 6 UL97_H411Y  1.69%                    18          
 #> 7 UL97_H411Y  1.69%         0.5        12          
-#> 8 UL97_T409M 37.13%         0.9        81          
-#> 9 UL97_T409M 37.13%                    90          
+#> 8 UL97_T409M 37.13%                    90          
+#> 9 UL97_T409M 37.13%         0.9        81          
 #>                                           ref_doi
 #> 1                  doi: 10.1016/j.jcv.2011.01.004
 #> 2   https://doi.org/10.1016/S1386-6532(01)00160-3
 #> 3                            10.1128/AAC.00186-10
-#> 4 https://doi.org/10.1016/j.antiviral.2019.104616
-#> 5       https://dx.doi.org/10.1128%2FAAC.01259-10
+#> 4       https://dx.doi.org/10.1128%2FAAC.01259-10
+#> 5 https://doi.org/10.1016/j.antiviral.2019.104616
 #> 6 https://doi.org/10.1016/j.antiviral.2019.104616
 #> 7                       DOI: 10.1128/JVI.01787-07
-#> 8                  https://doi.org/10.1086/518514
-#> 9 https://doi.org/10.1016/j.antiviral.2019.104616
-
-
+#> 8 https://doi.org/10.1016/j.antiviral.2019.104616
+#> 9                  https://doi.org/10.1086/518514
 
 
 ## call all variants
-
 mutations_all = call_resistance(infile = my_sample, all_mutations = T)
-
 
 #to view all mutations in resistance genes we can filter
 mutations_res = mutations_all[mutations_all$GENEID %in% c("UL54", "UL97", "UL27", "UL51", "UL56", "UL89"),]
@@ -136,6 +128,11 @@ head(mutations_res_nonsyn[,c(1,8,21,32:40)])
 #> 1008            NA                    NA       NA                      NA
 #> 1018            NA       <NA>         NA       NA      <NA>            NA
 
+
+## view the full database
+db = cmvdrg_data()
+head(db$aa_change)
+#> [1] "D301N" "C304S" "N408D" "N408K" "N408S" "N410K"
 
 ## run the shiny application
 # runShinyCMV()
