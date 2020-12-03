@@ -1,7 +1,7 @@
 Package: cmvdrg
 Type: Package
 Title: Human CMV Drug Resistance Genotyping
-Version: 0.1.1
+Version: 0.2
 Authors@R: c(
     person("OJ", "Charles", email = "oscar.charles.18@ucl.ac.uk", role = c("aut", "cre")),
     person("C", "Venturini", email = "c.venturini@ucl.ac.uk", role = "aut"))
@@ -17,7 +17,8 @@ Encoding: UTF-8
 biocViews:
 Depends:
   R (>= 3.4.0),
-	shiny
+	shiny,
+	magrittr
 Imports:
 	  VariantAnnotation,
     ggplot2,
@@ -36,8 +37,7 @@ Imports:
     AnnotationDbi,
     S4Vectors,
     utils,
-    rlang,
-    magrittr
+    rlang
 Suggests: 
     knitr,
     rmarkdown,

@@ -4,14 +4,18 @@
 \alias{plot_lollipop}
 \title{Make gene lollipop plot}
 \usage{
-plot_lollipop(f.dat, f.gene = "UL54", global)
+plot_lollipop(
+  f.dat,
+  f.gene = "UL54",
+  resistance_table = system.file("db", "cmvdrg-db1.csv", package = "cmvdrg")
+)
 }
 \arguments{
 \item{f.dat}{resistance data frame from cmvdrg, where all_muts == F}
 
 \item{f.gene}{Which gene to plot}
 
-\item{global}{Package object for consistent runtime variables}
+\item{resistance_table}{location of the csv resistance database}
 }
 \value{
 intermediate data.frame with genome level annotation

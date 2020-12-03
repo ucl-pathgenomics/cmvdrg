@@ -72,7 +72,7 @@ conda install mafft
 ``` r
 library("cmvdrg")
 
-## call resistant variants
+#----- call resistant variants
 my_sample = system.file("testdata", "A10.vcf", package = "cmvdrg")
 
 data = call_resistance(infile = my_sample, all_mutations = F,inc_anecdotal = F)
@@ -100,7 +100,7 @@ data[ , c("change", "freq", "Ganciclovir", "Maribavir", "Foscarnet", "ref_doi")]
 #> 9                  https://doi.org/10.1086/518514
 
 
-## call all variants
+#----- call all variants
 mutations_all = call_resistance(infile = my_sample, all_mutations = T)
 
 #to view all mutations in resistance genes we can filter
@@ -127,14 +127,29 @@ head(mutations_res_nonsyn[,c(1,8,21,32:40)])
 #> 1007            NA                    NA       NA                      NA
 #> 1008            NA                    NA       NA                      NA
 #> 1018            NA       <NA>         NA       NA      <NA>            NA
+```
 
+## other functionality
 
-## view the full database
+``` r
+#----- visualise variants
+plot_lollipop(data, "UL97")
+```
+
+<img src="man/figures/README-unnamed-chunk-3-1.png" width="70%" style="display: block; margin: auto;" />
+
+``` r
+
+#----- Generate a clinical overview of strain sensetivity
+#clin_table = make_clin_table(data)
+
+#-----view the full database
 db = cmvdrg_data()
 head(db$aa_change)
 #> [1] "D301N" "C304S" "N408D" "N408K" "N408S" "N410K"
 
-## run the shiny application
+
+#----- run the shiny application
 # runShinyCMV()
 ```
 

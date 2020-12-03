@@ -15,15 +15,9 @@ test_that("Data table is functioning", {
 
 
 test_that("lollipops are correct", {
-  #package variables
-  global = list()
-  global$res_table = system.file("db", "cmvdrg-db1.csv", package = "cmvdrg")
-  #create unique session folder
-  global$date <- format(Sys.time(), "%Y-%m-%d")
-  global$dir = ""
   
   dat = call_resistance(infile = system.file("testdata",  "A10.vcf", package = "cmvdrg"),all_mutations = FALSE, inc_anecdotal = T)
-  plot = plot_lollipop(dat, f.gene = "UL54", global = global)
+  plot = plot_lollipop(dat, f.gene = "UL54")
   
   expect_equal(length(plot$layers),5)
   expect_equal(class(plot$layers[[1]]$geom)[1], "GeomSegment")

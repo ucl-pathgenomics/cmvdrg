@@ -174,7 +174,7 @@ shinyServer(function(input, output, session) {
   })
     output$vcf.plot.lollipop.UL54 <- renderPlot({
     mut <- data.frame(vcf.d.res(),stringsAsFactors = F)
-    g <- plot_lollipop(mut, f.gene = "UL54",global = global)
+    g <- plot_lollipop(mut, f.gene = "UL54",resistance_table = global$res_table)
     #ggsave(plot = g, filename = paste("session/",global$date, "/",session$token, "/UL54-", "lollipop.png", sep = ""), device = "png")
     return(g)
   })
@@ -187,7 +187,7 @@ shinyServer(function(input, output, session) {
     })
   output$vcf.plot.lollipop.UL97 <- renderPlot({
     mut <- data.frame(vcf.d.res(),stringsAsFactors = F)
-    g <- plot_lollipop(mut, f.gene = "UL97",global = global)
+    g <- plot_lollipop(mut, f.gene = "UL97",resistance_table = global$res_table)
     #ggsave(plot = g, filename = paste("session/",global$date, "/",session$token, "/UL97-", "lollipop.png", sep = ""), device = "png")
     return(g)
   })
@@ -200,7 +200,7 @@ shinyServer(function(input, output, session) {
   })
   output$vcf.plot.lollipop.UL89 <- renderPlot({
     mut <- data.frame(vcf.d.res(),stringsAsFactors = F)
-    g <- plot_lollipop(mut, f.gene = "UL89", global = global)
+    g <- plot_lollipop(mut, f.gene = "UL89", resistance_table = global$res_table)
     #ggsave(plot = g, filename = paste("session/",global$date, "/",session$token, "/UL89-", "lollipop.png", sep = ""), device = "png")
     return(g)
   })
@@ -214,7 +214,7 @@ shinyServer(function(input, output, session) {
   })
   output$vcf.plot.lollipop.UL56 <- renderPlot({
     mut <- data.frame(vcf.d.res(),stringsAsFactors = F)
-    g <- plot_lollipop(mut, f.gene = "UL56",global = global)
+    g <- plot_lollipop(mut, f.gene = "UL56",resistance_table = global$res_table)
     #ggsave(plot = g, filename = paste("session/",global$date, "/",session$token, "/UL56-", "lollipop.png", sep = ""), device = "png")
     return(g)
   })
@@ -229,7 +229,7 @@ shinyServer(function(input, output, session) {
   })
   output$vcf.plot.lollipop.UL51 <- renderPlot({
     mut <- data.frame(vcf.d.res(),stringsAsFactors = F)
-    g <- plot_lollipop(mut, f.gene = "UL51",global = global)
+    g <- plot_lollipop(mut, f.gene = "UL51",resistance_table = global$res_table)
     #ggsave(plot = g, filename = paste("session/",global$date, "/",session$token, "/UL51-", "lollipop.png", sep = ""), device = "png")
     return(g)
   })
@@ -244,7 +244,7 @@ shinyServer(function(input, output, session) {
   })
   output$vcf.plot.lollipop.UL27 <- renderPlot({
     mut <- data.frame(vcf.d.res(),stringsAsFactors = F)
-    g <- plot_lollipop(mut, f.gene = "UL27",global = global)
+    g <- plot_lollipop(mut, f.gene = "UL27",resistance_table = global$res_table)
     #ggsave(plot = g, filename = paste("session/",global$date, "/",session$token, "/UL27-", "lollipop.png", sep = ""), device = "png")
     return(g)
   })

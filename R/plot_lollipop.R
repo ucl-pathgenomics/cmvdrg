@@ -5,7 +5,7 @@
 #'
 #' @param f.dat resistance data frame from cmvdrg, where all_muts == F
 #' @param f.gene Which gene to plot
-#' @param global Package object for consistent runtime variables
+#' @param resistance_table location of the csv resistance database
 #' @return intermediate data.frame with genome level annotation
 #' 
 #' @importFrom magrittr "%>%"
@@ -14,7 +14,7 @@
 #' @export
 
 
-plot_lollipop <- function(f.dat, f.gene = "UL54", global){
+plot_lollipop <- function(f.dat, f.gene = "UL54", resistance_table = system.file("db", "cmvdrg-db1.csv", package = "cmvdrg")){
   ## plot mutations in specific genes with resistance mutation.
   # this could be cleaned up a lot.
   
@@ -33,7 +33,6 @@ plot_lollipop <- function(f.dat, f.gene = "UL54", global){
     # call res mutations from mutations
     mut_res <- mut %>% dplyr::filter(.data$GENEID==f.gene & .data$CONSEQUENCE=="nonsynonymous")
     mut_res$depth <- mut_res$RefCount + mut_res$VarCount 
-    resistance_table=global$res_table
     resistance <- utils::read.csv(resistance_table, header = TRUE,as.is = TRUE)
     resistance$change <- paste(resistance$gene,resistance$aa_change,sep="_")
     resistance$aapos <- readr::parse_number(resistance$aa_change)
@@ -66,7 +65,7 @@ plot_lollipop <- function(f.dat, f.gene = "UL54", global){
       ggplot2::geom_hline(yintercept = 0) +
       #lollipop called res muts
       ggplot2::geom_segment( data = d.resmuts, ggplot2::aes(x = .data$x, xend = .data$x, y = 0, yend = .data$y, colour = .data$resistance)) +
-      ggplot2::geom_point(data = d.resmuts, ggplot2::aes(x = .data$x, y = .data$y, colour = "Sample Mutations" , size = 8), show.legend=FALSE) +
+      ggplot2::geom_point(data = d.resmuts, ggplot2::aes(x = .data$x, y = .data$y), show.legend=FALSE) +
       #ggplot2::geom_text(data = d.resmuts, ggplot2::aes(x = .data$x, y = .data$y, label = .data$label), angle = 0, nudge_y = 1)  + 
       ggplot2::scale_colour_manual(values = c("#00BA38", "#F8766D", "#619CFF"),
                           labels = c("Polymorphism", "Resistant", "Sample Mutation"), 
